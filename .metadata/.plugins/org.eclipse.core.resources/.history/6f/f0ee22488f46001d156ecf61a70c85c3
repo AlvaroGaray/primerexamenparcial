@@ -1,0 +1,19 @@
+package primerexamenparcial;
+import java.util.*;
+
+public class CalculoDepreciacionActivos {
+
+	public static void main(String[] args) {
+		
+		Scanner es=new Scanner(System.in);
+		
+		System.out.println("Por cual metodo desea que se realize la Depreciacion");
+		System.out.println("1.Metodo de Linea Recta\n 2.Metodo de unidades producidas");
+		int dm=es.nextInt();
+		
+		switch(dm) {
+		case 1:
+		}
+	}
+
+}

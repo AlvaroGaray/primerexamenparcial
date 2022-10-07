@@ -1,0 +1,58 @@
+package primerexamenparcial;
+import java.util.*;
+
+public class CalculoDepreciacionActivos {
+
+	public static void main(String[] args) {
+
+		Scanner es=new Scanner(System.in);
+
+		System.out.println("Por cual metodo desea que se realize la Depreciacion?\n");
+		System.out.println("1.Metodo de Linea Recta\n2.Método de la suma de los dígitos por año");
+		System.out.println("3.Método de las unidades producidas\n4.Método de reducción de saldo \n=");
+		int dm=es.nextInt();
+
+		
+			switch(dm) {
+			case 1:
+				System.out.println("Metodo de Linea Recta");
+				System.out.println("-----------------------");
+				System.out.println("Ingrese el Costo del Activo");
+				double CostoActivo=es.nextDouble();
+				System.out.println("Ahora la Vida Util de dicho Activo (Meses)");
+				double VidaUtil=es.nextDouble();
+				
+				MetodoDeLineaRecta(CostoActivo, VidaUtil);
+				break;
+			case 2:
+				System.out.println("Método de la suma de los dígitos por año");
+				
+				break;
+			case 3:
+				System.out.println("Método de las unidades producidas");
+				
+				break;
+			case 4:
+				System.out.println("Método de reducción de saldo");
+
+			}
+				
+				
+				
+			}//Fin del Main
+		
+	
+	public static double MetodoDeLineaRecta(double CostoActivo,double VidaUtil) {
+		
+		
+		double Cuotadeamortizacion=CostoActivo/VidaUtil;
+		System.out.println("La depreciacion Mensual del Activo es de :"+ Cuotadeamortizacion);
+
+		return Cuotadeamortizacion;
+		
+	}
+
+	}
+
+
+
