@@ -1,108 +1,175 @@
 package primerexamenparcial;
 import java.util.*;
 
+import javax.xml.validation.Validator;
+
 public class CalculoDepreciacionActivos {
+
+	final static Scanner es = new Scanner(System.in);
+
+	private static int vidautil;
+	private static double[] depreciacion;
+	private static double depreciaciontotal;
+	public static float depreciacionanual, residuo, unidadesProducidas, valorActivo, depreciacionPorUnidad,
+			valorsalvamento;
+	public static CalculoDepreciacionActivos calculo = new CalculoDepreciacionActivos();
 
 	public static void main(String[] args) {
 
-		Scanner es=new Scanner(System.in);
-			int op;
-		
-		System.out.println("Por cual metodo desea que se realize la Depreciacion?\n");
-		System.out.println("1.Metodo de Linea Recta\n2.Método de la suma de los dígitos por año");
-		System.out.println("3.Método de las unidades producidas\n4.Método de reducción de saldo \n=");
-		op=es.nextInt();
+		int op;
+		double[] depreciacion = new double[30];
 
-		
+		calculo.menu();
+		do {
+			calculo.validar();
+			op = es.nextInt();
+		} while (op < 1 || op > 4);
 
-		
-			switch(op) {
+		switch (op) {
 			case 1:
-				System.out.println("Metodo de Linea Recta");
-				System.out.println("-----------------------");
-				System.out.println("Ingrese el Costo del Activo");
-				double CostoActivo=es.nextDouble();
-				System.out.println("Ahora la Vida Util de dicho Activo (Meses)");
-				double VidaUtil=es.nextDouble();
-				
-				MetodoDeLineaRecta(CostoActivo, VidaUtil);
+
+				do {
+					System.out.println("Digite el costo del Activo ");
+					calculo.validar();
+					valorActivo = es.nextFloat();
+					System.out.println("Digite el residuo de la depreciacion");
+					calculo.validar();
+					residuo = es.nextFloat();
+					System.out.println("Digite la vida util del activo");
+					calculo.validar();
+					vidautil = es.nextInt();
+				} while (valorActivo < 0 && residuo < 0 && vidautil < 0);
+				for (int i = 0; i < vidautil; i++) {
+					depreciacion[i] = (valorActivo * i) / 15;
+				}
+				for (int i = 0; i < vidautil; i++) {
+
+					depreciaciontotal += depreciacion[i];
+
+				}
+				for (int i = 0; i < vidautil; i++) {
+					System.out.println(
+							"la depreciacion anual del activo en el anioo " + (i + 1) + " es : " + depreciacion[i]);
+				}
+				System.out.println("La depreciciaon total es " + depreciaciontotal);
+
 				break;
 			case 2:
-				System.out.println("Método de la suma de los dígitos por anio");
-				MetodoDeLaSumaDeLosDigitosPorAnio();				
+				do {
+					System.out.println("digite el valor del activo");
+					calculo.validar();
+					valorActivo = es.nextFloat();
+					System.out.println("Digite el residuo ");
+					calculo.validar();
+					residuo = es.nextFloat();
+					System.out.println("Digite la vida util del activo");
+					calculo.validar();
+					vidautil = es.nextInt();
+				} while (valorActivo <= 0 && residuo <= 0 && vidautil <= 0);
+				// calculando la depreciacion
+				depreciaciontotal = calculo.MetodoLineal();
+				System.out.println("La depreciacion es: " + depreciaciontotal);
+
 				break;
 			case 3:
-				System.out.println("Método de las unidades producidas");
-				System.out.println("-----------------------");
-				System.out.println("Ingrese el costo del Activo (En este caso Vehiculo) , Porfavor");
-				double CostoActivo3=es.nextDouble();
-				System.out.println("Ingrese el Valor del desecho");
-				double ValordelDesecho3=es.nextDouble();
-				System.out.println("Ingrese su Vida Util en Unidades (Kilometros) ");
-				double Vidautilenunidades3=es.nextDouble();
-				
-				Metododelasunidadesproducidas( CostoActivo3, ValordelDesecho3, Vidautilenunidades3);
-				
+				do {
+					System.out.println("digite el valor del activo");
+					calculo.validar();
+					valorActivo = es.nextFloat();
+					System.out.println("Digite el residuo ");
+					calculo.validar();
+					residuo = es.nextFloat();
+					System.out.println("Digite la vida util del activo");
+					calculo.validar();
+					vidautil = es.nextInt();
+				} while (valorActivo <= 0 && residuo <= 0 && vidautil <= 0);
+				// calculando la depreciacion
+				for (int i = 0; i <= vidautil; i++) {
+					depreciacion[i] = calculo.MetodoDeReduccionDeSaldos();
+				}
+				for (int i = 0; i < vidautil; i++) {
+					depreciaciontotal += depreciacion[i];
+					System.out.println("La depreciacion por año es: " + depreciacion[i]);
+				}
+				System.out.println("La depreciacion total es: " + depreciaciontotal);
 				break;
 			case 4:
-				System.out.println("Método de reducción de saldo");
-				System.out.println("-----------------------");
-				System.out.println("Ingrese el Costo del Activo");
-				double CostoActivo4=es.nextDouble();
-				System.out.println("Ahora la Vida Util de dicho Activo (Meses)");
-				double VidaUtil4=es.nextDouble();
-				System.out.println("Ingrese el Valor del Desecho");
-				double ValordeDesecho4=es.nextDouble();
-				
-				MetododeReducciondeSaldo(CostoActivo4, VidaUtil4,ValordeDesecho4);
+				do {
+					System.out.println("digite el valor del activo");
+					calculo.validar();
+					valorActivo = es.nextFloat();
+					System.out.println("Digite cuanto se deprecia la maquina por unidad ");
+					while (!es.hasNextFloat()) {
+						es.next();
+						System.out.println("Digite nuevamente");
+					}
+					depreciacionPorUnidad = es.nextFloat();
+					System.out.println("Digite la vida util del activo");
+					calculo.validar();
+					vidautil = es.nextInt();
+					System.out.println("la depreciacion anual del activo es: " + calculo.MetodoDeProduccion());
+					for (int i = 0; i <= vidautil; i++) {
+						depreciaciontotal += calculo.MetodoDeProduccion();
+					}
+					System.out.println("La depreciacion total del activo es: " + depreciaciontotal);
 
+				} while (valorActivo <= 0 && depreciacionPorUnidad <= 0 && vidautil <= 0);
+				break;
+		}
 
-			}
-		
-				
-				
-			}//Fin del Main
-		
-	
-	public static double MetodoDeLineaRecta(double CostoActivo,double VidaUtil) {
-		
-		
-		double Cuotadeamortizacion=CostoActivo/VidaUtil;
-		System.out.println("Si el costo del activo es"+ CostoActivo+" Este se divide entre la vida util que es "+VidaUtil);
-		System.out.println("La depreciacion Mensual del Activo es de :"+ Cuotadeamortizacion);
+	}// Fin del Main
+		// Metodos
 
-		return Cuotadeamortizacion;
-		
+	public float MetodoLineal() {
+
+		depreciacionanual = (valorActivo - residuo) / vidautil;
+
+		return depreciacionanual;
 	}
 
-	
-	private static void MetodoDeLaSumaDeLosDigitosPorAnio() {
-	
-	System.out.println("Ni idea");
+	public double MetodoDigitosAnuales() {
+		int suma = 0;
+		for (int i = 0; i <= vidautil; i++) {
+			suma += i;
+
+		}
+
+		return suma;
+	}
+
+	public float MetodoDeProduccion() {
+
+		unidadesProducidas = valorActivo / vidautil;
+		depreciacionanual = unidadesProducidas * depreciacionPorUnidad;
+
+		return depreciacionanual;
+	}
+
+	public float MetodoDeReduccionDeSaldos() {
+		float tasadepreciacion;
+		tasadepreciacion = 1 - ((float) Math.pow(valorsalvamento / valorActivo, 1 / vidautil));
+		depreciacionanual = valorActivo * tasadepreciacion;
+		return depreciacionanual;
+	}
+
+	public void menu() {
+		System.out.println("Digite la opcion del activo que desea depreciar");
+		System.out.println("1.Edificio");
+		System.out.println("2.vehiculo");
+		System.out.println("3.mobilidario y equipo de oficina");
+		System.out.println("4.Maquinaria");
 
 	}
-	
-	public static double Metododelasunidadesproducidas(double CostoActivo3, double ValordeDesecho3, double Vidautilenunidades3) {
-		
-		double Depreciacionanual3=(CostoActivo3-ValordeDesecho3) /Vidautilenunidades3;
-		System.out.println("La depreciacion Anual de este activo (Vehiculo) es :"+ Depreciacionanual3);
-		return Depreciacionanual3;
+
+	public void validar() {
+
+		while (!es.hasNextInt()) {
+			es.next();
+			System.out.println("Digite nuevamente");
+		}
 	}
-	
-	public static double MetododeReducciondeSaldo(double CostoActivo4,double VidaUtil4,double ValordeDesecho4) {
-		double Cuotadeamortizacion4=CostoActivo4/VidaUtil4;
-		Cuotadeamortizacion4=Cuotadeamortizacion4/100;
-		Cuotadeamortizacion4=Cuotadeamortizacion4*2;
-		
-		System.out.println("La depreciacion Mensual del Activo es de :"+ Cuotadeamortizacion4 +"%");
-		return Cuotadeamortizacion4;
-		
-		
-	}
+
 }
-
-
-
 
 
 
